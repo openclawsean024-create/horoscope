@@ -1,9 +1,8 @@
-// Mock Stripe utilities for demo purposes
-// In production, replace with real Stripe SDK calls
+// Stripe utilities — demo mode with API route ready for production
 
 export interface CheckoutSession {
   id: string;
-  url: string;
+  url: string | null;
   status: 'open' | 'complete';
 }
 
@@ -21,7 +20,7 @@ export const PLANS: PricingPlan[] = [
     id: 'monthly',
     name: '月度 Premium',
     price: 120,
-    priceId: 'price_mock_monthly_120twd',
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY || 'price_mock_monthly_120twd',
     interval: 'month',
     features: [
       '每日運勢（愛情/事業/財運/健康）',
@@ -35,7 +34,7 @@ export const PLANS: PricingPlan[] = [
     id: 'yearly',
     name: '年度 Premium',
     price: 999,
-    priceId: 'price_mock_yearly_999twd',
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_YEARLY || 'price_mock_yearly_999twd',
     interval: 'year',
     features: [
       '所有月度功能',
@@ -46,28 +45,34 @@ export const PLANS: PricingPlan[] = [
   },
 ];
 
-// Mock createCheckoutSession - in production, call your /api/create-checkout endpoint
-export async function createCheckoutSession(planId: string): Promise<CheckoutSession> {
-  // Simulate API delay
-  await new Promise((r) => setTimeout(r, 800));
-
-  const plan = PLANS.find((p) => p.id === planId);
-  if (!plan) throw new Error('Invalid plan');
-
-  // In production, this would call Stripe Checkout
-  // window.location.href = `https://checkout.stripe.com/...`
-  console.log(`[Mock Stripe] Creating checkout session for plan: ${planId}`);
-
-  return {
-    id: `cs_mock_${Date.now()}`,
-    url: `#mock-checkout-${planId}`,
-    status: 'open',
-  };
-}
-
 export async function redirectToCheckout(planId: string): Promise<void> {
-  const session = await createCheckoutSession(planId);
-  // In demo mode, show a mock confirmation
-  console.log(`[Mock Stripe] Would redirect to: ${session.url}`);
-  alert(`示範模式：您選擇了「${PLANS.find(p => p.id === planId)?.name}」\n\n在正式環境中，將跳轉至 Stripe Checkout 付款頁面。\n\nPlan ID: ${planId}`);
+  try {
+    const res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId }),
+    });
+
+    const data = await res.json();
+
+    if (data.demo || !data.url) {
+      // Demo mode — show upgrade modal instead
+      const plan = PLANS.find((p) => p.id === planId);
+      alert(
+        `示範模式：您選擇了「${plan?.name}」\n\n` +
+        `在正式環境中，將跳轉至 Stripe Checkout 付款頁面。\n\n` +
+        `請設定真實的 Stripe API Keys 以啟用付款功能。`
+      );
+      return;
+    }
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (err) {
+    console.error('[Stripe] Checkout error:', err);
+    alert('付款頁面載入失敗，請稍後再試。');
+  }
 }

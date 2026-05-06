@@ -1961,3 +1961,795 @@ h1, h2, h3, h4 {
   font-size: 0.75rem;
   border-top: 1px solid var(--border-subtle);
 }
+
+/* ============================================ */
+/* Tarot Page                                   */
+/* ============================================ */
+
+.tarot-page {}
+
+.tarot-hero {
+  text-align: center;
+  padding: 60px 32px 40px;
+}
+
+.tarot-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.4rem;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+  margin: 8px 0 16px;
+}
+
+.tarot-subtitle {
+  color: var(--gold);
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  margin-top: 12px;
+}
+
+.tarot-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+.tarot-spread-selector {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.tarot-spread-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 28px 40px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+  color: var(--text-primary);
+  min-width: 160px;
+}
+
+.tarot-spread-btn:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  background: var(--bg-card-hover);
+}
+
+.tarot-spread-btn.active {
+  border-color: var(--gold);
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 20px rgba(200, 169, 110, 0.08);
+}
+
+.tarot-spread-icon { font-size: 2rem; margin-bottom: 8px; }
+
+.tarot-spread-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.tarot-spread-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.tarot-draw-area {
+  text-align: center;
+  padding: 60px 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  margin-bottom: 48px;
+}
+
+.tarot-deck-visual {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.tarot-deck-stack {
+  position: relative;
+  width: 72px;
+  height: 100px;
+}
+
+.tarot-deck-card {
+  position: absolute;
+  width: 72px;
+  height: 100px;
+  background: linear-gradient(135deg, #1a1f30, #0f1520);
+  border: 1px solid rgba(200, 169, 110, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  top: 0;
+  left: 0;
+}
+
+.tarot-deck-stack.shuffling {
+  animation: deckShuffle 0.6s ease-in-out;
+}
+
+@keyframes deckShuffle {
+  0% { transform: rotate(0deg) translateX(0); }
+  25% { transform: rotate(-8deg) translateX(-20px); }
+  50% { transform: rotate(8deg) translateX(20px); }
+  75% { transform: rotate(-4deg) translateX(-10px); }
+  100% { transform: rotate(0deg) translateX(0); }
+}
+
+.tarot-draw-hint {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 32px;
+}
+
+.tarot-draw-btn {
+  background: linear-gradient(135deg, #c8a96e, #a8893a);
+  color: #07090f;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tarot-draw-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(200, 169, 110, 0.25);
+}
+
+.tarot-draw-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+}
+
+.tarot-draw-btn.secondary:hover {
+  background: rgba(200, 169, 110, 0.08);
+}
+
+.tarot-free-note {
+  margin-top: 16px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.tarot-reveal {
+  margin-bottom: 48px;
+}
+
+.tarot-cards-display {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tarot-card-result {
+  background: var(--bg-card);
+  border: 1px solid rgba(200, 169, 110, 0.25);
+  border-radius: 20px;
+  padding: 28px 24px;
+  width: 240px;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+
+.tarot-card-result:hover { border-color: rgba(200, 169, 110, 0.5); }
+
+.tarot-card-position-badge {
+  display: inline-block;
+  background: rgba(200, 169, 110, 0.12);
+  color: var(--gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.tarot-card-revealed {
+  margin-bottom: 20px;
+}
+
+.tarot-card-inner {
+  width: 80px;
+  height: 112px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #1a1f30, #0f1520);
+  border: 1px solid rgba(200, 169, 110, 0.4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.tarot-card-front {
+  text-align: center;
+}
+
+.tarot-card-symbol {
+  font-size: 1.6rem;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.tarot-card-name-zh {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  color: var(--text-primary);
+}
+
+.tarot-card-name-en {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.tarot-card-meaning-section {
+  text-align: left;
+}
+
+.tarot-card-name-full {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.tarot-card-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.tarot-keyword-tag {
+  background: rgba(200, 169, 110, 0.08);
+  border: 1px solid rgba(200, 169, 110, 0.2);
+  color: var(--gold-dim);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.tarot-card-full-meaning {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.tarot-card-position-meaning {
+  background: rgba(200, 169, 110, 0.05);
+  border: 1px solid rgba(200, 169, 110, 0.12);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.tarot-position-label {
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.tarot-position-desc {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tarot-draw-again {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.tarot-deck-info {
+  text-align: center;
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  margin-bottom: 32px;
+}
+
+.tarot-arcana-grid {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.tarot-arcana-item {
+  text-align: center;
+}
+
+.tarot-arcana-num {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.tarot-arcana-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin: 4px 0;
+}
+
+.tarot-arcana-desc {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  max-width: 140px;
+}
+
+.tarot-suits-intro {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.tarot-suit-intro-item {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.tarot-suit-name {
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+}
+
+.tarot-suit-element { color: var(--text-muted); }
+
+.tarot-footer-note {
+  text-align: center;
+  padding: 40px 32px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.tarot-free-limit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 9, 15, 0.9);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.tarot-modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  max-width: 360px;
+  position: relative;
+}
+
+.tarot-modal-icon {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.tarot-modal-content h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.tarot-modal-content p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.tarot-modal-cta {
+  display: inline-block;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #c8a96e, #a8893a);
+  color: #07090f;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-family: 'Cinzel', serif;
+}
+
+.tarot-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* ============================================ */
+/* Chart Page                                   */
+/* ============================================ */
+
+.chart-page {}
+
+.chart-hero {
+  text-align: center;
+  padding: 60px 32px 40px;
+}
+
+.chart-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.4rem;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+  margin: 8px 0 16px;
+}
+
+.chart-subtitle {
+  color: var(--gold);
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  margin-top: 12px;
+}
+
+.chart-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+.chart-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.chart-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 40px;
+}
+
+.chart-form-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.chart-form-icon {
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.chart-form-header h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.chart-form-header p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.chart-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 600px) { .chart-form-grid { grid-template-columns: 1fr; } }
+
+.chart-form-group {}
+
+.chart-form-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.chart-form-select {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.88rem;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c8a96e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.chart-form-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.chart-form-error {
+  background: rgba(200, 80, 80, 0.08);
+  border: 1px solid rgba(200, 80, 80, 0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #c8605a;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.chart-generate-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #c8a96e, #a8893a);
+  color: #07090f;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.chart-generate-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(200, 169, 110, 0.25);
+}
+
+.chart-form-note {
+  margin-top: 16px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.chart-info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.chart-info-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.chart-info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chart-info-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.chart-info-emoji { font-size: 1.6rem; }
+
+.chart-info-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.chart-info-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.chart-result-section {}
+
+.chart-result-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.chart-result-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.chart-result-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.chart-three-signs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 700px) { .chart-three-signs { grid-template-columns: 1fr; } }
+
+.chart-sign-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 32px 20px;
+  text-align: center;
+  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-sign-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.chart-sign-card:hover::before { opacity: 1; }
+.chart-sign-card:hover { border-color: rgba(200, 169, 110, 0.35); }
+
+.chart-sign-card.sun { border-color: rgba(200, 169, 110, 0.2); }
+.chart-sign-card.moon { border-color: rgba(180, 150, 200, 0.2); }
+.chart-sign-card.rising { border-color: rgba(120, 180, 200, 0.2); }
+
+.chart-sign-emoji { font-size: 2.8rem; margin-bottom: 8px; }
+
+.chart-sign-type {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.chart-sign-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.chart-sign-name-en {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.chart-sign-symbol {
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.chart-sign-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.chart-sign-element {
+  font-size: 0.7rem;
+  color: var(--gold-dim);
+  letter-spacing: 0.08em;
+}
+
+.chart-reading-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.chart-reading-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.chart-reading-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.chart-reading-text strong { color: var(--text-primary); }
+
+.chart-result-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-retry-btn {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--text-secondary);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.chart-retry-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.chart-detail-link {
+  background: linear-gradient(135deg, #c8a96e, #a8893a);
+  color: #07090f;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-family: 'Cinzel', serif;
+  transition: opacity 0.3s;
+}
+
+.chart-detail-link:hover { opacity: 0.85; }
+
+.chart-footer-note {
+  text-align: center;
+  padding: 40px 32px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ============================================ */
+/* Responsive helpers                           */
+/* ============================================ */
+
+@media (max-width: 768px) {
+  .tarot-spread-selector { flex-direction: column; align-items: center; }
+  .tarot-cards-display { flex-direction: column; align-items: center; }
+  .tarot-card-result { width: 100%; max-width: 300px; }
+  .tarot-arcana-grid { flex-direction: column; align-items: center; gap: 16px; }
+}

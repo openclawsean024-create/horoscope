@@ -50,6 +50,8 @@ export default function RootLayout({
               <ul className="nav-links">
                 <li><a href="/daily">每日運勢</a></li>
                 <li><a href="/weekly">每週運勢</a></li>
+                <li><a href="/tarot">塔羅占卜</a></li>
+                <li><a href="/chart">命盤</a></li>
                 <li><a href="/compatibility">相容度</a></li>
                 <li><a href="/#zodiac">Zodiac</a></li>
               </ul>
