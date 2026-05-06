@@ -2,8 +2,33 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '星座分析 | Horoscope',
-  description: '探索你的星座命盤，分析性格、幸運資訊、保養重點與塔羅占卜',
+  title: {
+    default: 'Stella Chart | Zodiac Archive',
+    template: '%s | Stella Chart',
+  },
+  description: 'Explore your zodiac identity through an elegant lens — deep, precise, timeless. 十二星座完整性格分析、每日運勢與相容度計算。',
+  keywords: ['星座', ' zodiac', ' horoscope', '星座運勢', '每日運勢', '相容度', '占星'],
+  authors: [{ name: 'Stella Chart' }],
+  openGraph: {
+    title: 'Stella Chart | Zodiac Archive',
+    description: 'Explore your zodiac identity through an elegant lens — deep, precise, timeless.',
+    url: 'https://horoscope-lake-eight.vercel.app',
+    siteName: 'Stella Chart',
+    type: 'website',
+    locale: 'zh_TW',
+    images: [{
+      url: 'https://horoscope-lake-eight.vercel.app/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'Stella Chart — The cosmos speaks in patterns.',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Stella Chart | Zodiac Archive',
+    description: 'Explore your zodiac identity through an elegant lens — deep, precise, timeless.',
+    images: ['https://horoscope-lake-eight.vercel.app/og-image.png'],
+  },
   icons: {
     icon: '/favicon.ico',
   },
@@ -21,18 +46,20 @@ export default function RootLayout({
         <nav className="nav" id="mainNav">
           <div className="container">
             <div className="nav-inner">
-              <a href="/" className="nav-logo">星座分析</a>
+              <a href="/" className="nav-logo">Stella Chart</a>
               <ul className="nav-links">
-                <li><a href="/#zodiac">星座命盤</a></li>
-                <li><a href="/#compat">相容度</a></li>
+                <li><a href="/daily">每日運勢</a></li>
+                <li><a href="/weekly">每週運勢</a></li>
+                <li><a href="/compatibility">相容度</a></li>
+                <li><a href="/#zodiac">Zodiac</a></li>
               </ul>
             </div>
           </div>
         </nav>
         {children}
         <footer className="footer">
-          <div className="footer-logo">星座分析</div>
-          <p>探索星辰，認識自我</p>
+          <div className="footer-logo">Stella Chart</div>
+          <p>The cosmos speaks in patterns.</p>
         </footer>
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
