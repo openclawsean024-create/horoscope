@@ -53,6 +53,7 @@ export default function RootLayout({
                 <li><a href="/tarot">塔羅占卜</a></li>
                 <li><a href="/chart">命盤</a></li>
                 <li><a href="/compatibility">相容度</a></li>
+                <li><a href="/subscribe" className="nav-subscribe">訂閱 Premium</a></li>
                 <li><a href="/#zodiac">Zodiac</a></li>
               </ul>
             </div>
