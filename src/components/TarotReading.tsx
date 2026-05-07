@@ -47,13 +47,11 @@ export default function TarotReading({ zodiacSign, birthMonth }: TarotReadingPro
     setIsDrawing(true);
     const shuffled = [...tarotDeck].sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, 3);
-    
-    // Simple seeding based on zodiac + month for "consistent" feeling
+
     setTimeout(() => {
       setDrawnCards(selected);
       setIsDrawing(false);
-      
-      // Persist to localStorage
+
       const history = JSON.parse(localStorage.getItem('tarot-history') || '[]');
       history.unshift({
         id: readingId,
@@ -69,9 +67,9 @@ export default function TarotReading({ zodiacSign, birthMonth }: TarotReadingPro
   return (
     <div className="mt-8 p-6 bg-purple-900/30 rounded-xl border border-purple-500/30">
       <h3 className="text-xl font-bold text-purple-300 mb-4">
-        🔮 塔羅牌占卜（${zodiacSign}・${birthMonth}月）
+        🔮 塔羅牌占卜（{zodiacSign}・{birthMonth}月）
       </h3>
-      
+
       {!isDrawing && drawnCards.length === 0 && (
         <button
           onClick={drawCards}
@@ -104,7 +102,7 @@ export default function TarotReading({ zodiacSign, birthMonth }: TarotReadingPro
               </div>
             ))}
           </div>
-          
+
           <div className="bg-purple-950/50 rounded-lg p-4 mt-4">
             <p className="text-purple-200 text-sm">
               <span className="font-semibold text-purple-300">總體指引：</span>
@@ -114,7 +112,7 @@ export default function TarotReading({ zodiacSign, birthMonth }: TarotReadingPro
               占卜 ID：{readingId}
             </p>
           </div>
-          
+
           <button
             onClick={drawCards}
             className="px-4 py-2 bg-purple-700/50 hover:bg-purple-600/50 text-purple-200 rounded-lg transition-colors text-sm"

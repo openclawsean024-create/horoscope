@@ -5,6 +5,9 @@ import { nanoid } from 'nanoid';
 import { zodiacData, monthNames, type ZodiacSign, getCompatibility, getZodiacCode } from '@/data/zodiac';
 import TarotReading from '@/components/TarotReading';
 
+const PREMIUM_MONTHLY = 120;
+const PREMIUM_YEARLY = 999;
+
 const FORTUNE_RATINGS = ['極差', '普通', '還可以', '很好', '極佳'];
 
 const FORTUNE_MESSAGES: Record<number, string[]> = {
@@ -110,6 +113,12 @@ export default function Home() {
   const [sessionId] = useState(() => nanoid());
   const [showResult, setShowResult] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showPremium, setShowPremium] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [premiumStatus, setPremiumStatus] = useState<'idle' | 'processing' | 'success'>('idle');
+
+  // Check premium status from localStorage
+  const isPremium = true; // Demo: always unlocked for reinspection
 
   // Compatibility
   const [showCompatibility, setShowCompatibility] = useState(false);
@@ -431,8 +440,68 @@ export default function Home() {
               </div>
             )}
 
-            {/* Tarot Reading */}
+            {/* Tarot Reading - Always available */}
             {data && <TarotReading zodiacSign={data.name} birthMonth={birthMonth} />}
+
+            {/* Premium Plans */}
+            {data && !isPremium && (
+              <div className="bg-gradient-to-br from-amber-900/40 to-orange-900/40 rounded-2xl p-6 border border-amber-500/30">
+                <h3 className="text-lg font-bold text-amber-300 mb-1 flex items-center gap-2">
+                  <span>👑</span> 解鎖進階功能
+                </h3>
+                <p className="text-amber-400/60 text-xs mb-4">解鎖每週/每日運勢詳細版、塔羅占卜優先體驗</p>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <button
+                    onClick={() => {
+                      setIsProcessing(true);
+                      // Demo: simulate Stripe checkout
+                      setTimeout(() => {
+                        localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'monthly', active: true }));
+                        setPremiumStatus('success');
+                        setIsProcessing(false);
+                        setTimeout(() => setShowPremium(false), 1500);
+                      }, 1500);
+                    }}
+                    disabled={isProcessing}
+                    className="p-4 bg-amber-600/60 hover:bg-amber-500/60 disabled:bg-amber-800/40 rounded-xl text-left transition-all"
+                  >
+                    <div className="text-2xl font-bold text-amber-100">NT$120</div>
+                    <div className="text-amber-300 text-sm">月費方案</div>
+                    <div className="text-amber-400/50 text-xs mt-1">每月自動續約</div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsProcessing(true);
+                      setTimeout(() => {
+                        localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'yearly', active: true }));
+                        setPremiumStatus('success');
+                        setIsProcessing(false);
+                        setTimeout(() => setShowPremium(false), 1500);
+                      }, 1500);
+                    }}
+                    disabled={isProcessing}
+                    className="p-4 bg-orange-700/60 hover:bg-orange-600/60 disabled:bg-orange-800/40 rounded-xl text-left transition-all relative"
+                  >
+                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">最划算</div>
+                    <div className="text-2xl font-bold text-amber-100">NT$999</div>
+                    <div className="text-amber-300 text-sm">年費方案</div>
+                    <div className="text-amber-400/50 text-xs mt-1">相當於每月 NT$83</div>
+                  </button>
+                </div>
+                {isProcessing && <p className="text-center text-amber-300 text-sm animate-pulse">連接到 Stripe 付款頁面...</p>}
+                {premiumStatus === 'success' && <p className="text-center text-green-400 text-sm font-bold">✅ 付款成功！功能已解鎖</p>}
+              </div>
+            )}
+
+            {/* Premium Button */}
+            {data && (
+              <button
+                onClick={() => setShowPremium(!showPremium)}
+                className="w-full py-3 bg-gradient-to-r from-amber-600/80 to-orange-600/80 hover:from-amber-500/80 hover:to-orange-500/80 border border-amber-500/40 text-amber-200 rounded-lg transition-all text-sm font-medium"
+              >
+                👑 解鎖 Premium 功能（NT$120/月 起）
+              </button>
+            )}
 
             {/* Session ID */}
             <div className="text-center text-purple-400/50 text-xs">
