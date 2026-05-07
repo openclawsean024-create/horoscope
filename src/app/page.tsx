@@ -118,7 +118,24 @@ export default function Home() {
   const [premiumStatus, setPremiumStatus] = useState<'idle' | 'processing' | 'success'>('idle');
 
   // Check premium status from localStorage
-  const isPremium = true; // Demo: always unlocked for reinspection
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('horoscope-premium');
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        setIsPremium(!!data.active);
+      } catch {}
+    }
+    // Handle demo/callback from Stripe redirect
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('checkout') === 'success') {
+      localStorage.setItem('horoscope-premium', JSON.stringify({ plan: params.get('plan') || 'monthly', active: true }));
+      setIsPremium(true);
+      setShowPremium(false);
+    }
+  }, []);
 
   // Compatibility
   const [showCompatibility, setShowCompatibility] = useState(false);
@@ -452,40 +469,67 @@ export default function Home() {
                 <p className="text-amber-400/60 text-xs mb-4">解鎖每週/每日運勢詳細版、塔羅占卜優先體驗</p>
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       setIsProcessing(true);
-                      // Demo: simulate Stripe checkout
-                      setTimeout(() => {
-                        localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'monthly', active: true }));
-                        setPremiumStatus('success');
+                      try {
+                        const res = await fetch('/api/checkout', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ plan: 'monthly' }),
+                        });
+                        const data = await res.json();
+                        if (data.demo) {
+                          // Demo mode: simulate success locally
+                          localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'monthly', active: true }));
+                          setIsPremium(true);
+                          setPremiumStatus('success');
+                          setTimeout(() => { setIsProcessing(false); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
+                        } else if (data.url) {
+                          window.location.href = data.url;
+                        }
+                      } catch {
                         setIsProcessing(false);
-                        setTimeout(() => setShowPremium(false), 1500);
-                      }, 1500);
+                      }
                     }}
                     disabled={isProcessing}
-                    className="p-4 bg-amber-600/60 hover:bg-amber-500/60 disabled:bg-amber-800/40 rounded-xl text-left transition-all"
+                    className="p-4 bg-amber-600/60 hover:bg-amber-500/60 disabled:bg-amber-800/40 rounded-xl text-left transition-all font-stripe"
                   >
                     <div className="text-2xl font-bold text-amber-100">NT$120</div>
                     <div className="text-amber-300 text-sm">月費方案</div>
                     <div className="text-amber-400/50 text-xs mt-1">每月自動續約</div>
+                    <div className="mt-2 text-xs text-amber-200/60">▲ 點擊以 Stripe 安全結帳</div>
                   </button>
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       setIsProcessing(true);
-                      setTimeout(() => {
-                        localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'yearly', active: true }));
-                        setPremiumStatus('success');
+                      try {
+                        const res = await fetch('/api/checkout', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ plan: 'yearly' }),
+                        });
+                        const data = await res.json();
+                        if (data.demo) {
+                          // Demo mode: simulate success locally
+                          localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'yearly', active: true }));
+                          setIsPremium(true);
+                          setPremiumStatus('success');
+                          setTimeout(() => { setIsProcessing(false); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
+                        } else if (data.url) {
+                          window.location.href = data.url;
+                        }
+                      } catch {
                         setIsProcessing(false);
-                        setTimeout(() => setShowPremium(false), 1500);
-                      }, 1500);
+                      }
                     }}
                     disabled={isProcessing}
-                    className="p-4 bg-orange-700/60 hover:bg-orange-600/60 disabled:bg-orange-800/40 rounded-xl text-left transition-all relative"
+                    className="p-4 bg-orange-700/60 hover:bg-orange-600/60 disabled:bg-orange-800/40 rounded-xl text-left transition-all relative font-stripe"
                   >
                     <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">最划算</div>
                     <div className="text-2xl font-bold text-amber-100">NT$999</div>
                     <div className="text-amber-300 text-sm">年費方案</div>
                     <div className="text-amber-400/50 text-xs mt-1">相當於每月 NT$83</div>
+                    <div className="mt-2 text-xs text-amber-200/60">▲ 點擊以 Stripe 安全結帳</div>
                   </button>
                 </div>
                 {isProcessing && <p className="text-center text-amber-300 text-sm animate-pulse">連接到 Stripe 付款頁面...</p>}
