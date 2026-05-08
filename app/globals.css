@@ -1780,6 +1780,35 @@ h1, h2, h3, h4 {
 .paywall-subscribe-btn:hover { opacity: 0.88; transform: translateY(-1px); }
 .paywall-subscribe-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+.paywall-demo-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  gap: 12px;
+}
+.paywall-demo-icon {
+  font-size: 3rem;
+}
+.paywall-demo-success h3 {
+  color: #2ecc71;
+  margin: 0;
+  font-size: 1.2rem;
+}
+.paywall-demo-success p {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.9rem;
+}
+.paywall-error {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: -8px 0 12px 0;
+}
+
 .paywall-footer {
   display: flex;
   align-items: center;

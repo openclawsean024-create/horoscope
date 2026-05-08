@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { PLANS, redirectToCheckout } from '@/lib/stripe';
+import { PLANS } from '@/lib/stripe';
 
 interface SubscribeModalProps {
   isOpen: boolean;
@@ -12,19 +12,54 @@ interface SubscribeModalProps {
 export default function SubscribeModal({ isOpen, onClose, featureContext }: SubscribeModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
   const [loading, setLoading] = useState(false);
+  const [demoSuccess, setDemoSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
   const selected = PLANS.find((p) => p.id === selectedPlan)!;
 
   const handleSubscribe = async () => {
+    setError(null);
     setLoading(true);
     try {
-      await redirectToCheckout(selectedPlan);
-    } finally {
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId: selectedPlan }),
+      });
+      const data = await res.json();
+      if (data.demo || !data.url) {
+        localStorage.setItem('horoscope-premium', JSON.stringify({ plan: selectedPlan, active: true }));
+        setDemoSuccess(true);
+        setTimeout(() => { window.location.reload(); }, 1500);
+        return;
+      }
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || '請稍後再試');
+        setLoading(false);
+      }
+    } catch {
+      setError('網路連線失敗，請檢查網路後再試');
       setLoading(false);
     }
   };
+
+  if (demoSuccess) {
+    return (
+      <div className="paywall-overlay">
+        <div className="paywall-modal">
+          <div className="paywall-demo-success">
+            <div className="paywall-demo-icon">✅</div>
+            <h3>示範模式</h3>
+            <p>Premium 已解鎖！即將重新整理頁面...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="paywall-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
@@ -80,8 +115,9 @@ export default function SubscribeModal({ isOpen, onClose, featureContext }: Subs
           onClick={handleSubscribe}
           disabled={loading}
         >
-          {loading ? '連接中...' : `立即升級 — NT$ ${selected.price}/${selected.interval === 'month' ? '月' : '年'}`}
+          {loading ? '連接到 Stripe 付款頁面...' : `立即升級 — NT$ ${selected.price}/${selected.interval === 'month' ? '月' : '年'}`}
         </button>
+        {error && <p className="paywall-error">{error}</p>}
 
         <div className="paywall-footer">
           <span>安全加密付款</span>
