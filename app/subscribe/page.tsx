@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import { PLANS } from '@/lib/stripe';
 import SubscribeButton from './SubscribeButton';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: '訂閱 Premium | Stella Chart 星座命盤',
   description: '升級 Stella Chart Premium，解鎖完整星座運勢、塔羅占卜與進階分析。',
