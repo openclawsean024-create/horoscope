@@ -115,7 +115,9 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingPlan, setProcessingPlan] = useState<string | null>(null);
   const [premiumStatus, setPremiumStatus] = useState<'idle' | 'processing' | 'success'>('idle');
+  const [premiumError, setPremiumError] = useState<string | null>(null);
 
   // Check premium status from localStorage
   const [isPremium, setIsPremium] = useState(false);
@@ -470,6 +472,8 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <button
                     onClick={async () => {
+                      setPremiumError(null);
+                      setProcessingPlan('monthly');
                       setIsProcessing(true);
                       try {
                         const res = await fetch('/api/checkout', {
@@ -483,12 +487,18 @@ export default function Home() {
                           localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'monthly', active: true }));
                           setIsPremium(true);
                           setPremiumStatus('success');
-                          setTimeout(() => { setIsProcessing(false); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
+                          setTimeout(() => { setIsProcessing(false); setProcessingPlan(null); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
                         } else if (data.url) {
                           window.location.href = data.url;
+                        } else {
+                          setPremiumError(data.error || '請稍後再試');
+                          setIsProcessing(false);
+                          setProcessingPlan(null);
                         }
                       } catch {
+                        setPremiumError('網路連線失敗，請檢查網路後再試');
                         setIsProcessing(false);
+                        setProcessingPlan(null);
                       }
                     }}
                     disabled={isProcessing}
@@ -501,6 +511,8 @@ export default function Home() {
                   </button>
                   <button
                     onClick={async () => {
+                      setPremiumError(null);
+                      setProcessingPlan('yearly');
                       setIsProcessing(true);
                       try {
                         const res = await fetch('/api/checkout', {
@@ -514,12 +526,18 @@ export default function Home() {
                           localStorage.setItem('horoscope-premium', JSON.stringify({ plan: 'yearly', active: true }));
                           setIsPremium(true);
                           setPremiumStatus('success');
-                          setTimeout(() => { setIsProcessing(false); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
+                          setTimeout(() => { setIsProcessing(false); setProcessingPlan(null); setPremiumStatus('idle'); setShowPremium(false); }, 1500);
                         } else if (data.url) {
                           window.location.href = data.url;
+                        } else {
+                          setPremiumError(data.error || '請稍後再試');
+                          setIsProcessing(false);
+                          setProcessingPlan(null);
                         }
                       } catch {
+                        setPremiumError('網路連線失敗，請檢查網路後再試');
                         setIsProcessing(false);
+                        setProcessingPlan(null);
                       }
                     }}
                     disabled={isProcessing}
@@ -534,6 +552,10 @@ export default function Home() {
                 </div>
                 {isProcessing && <p className="text-center text-amber-300 text-sm animate-pulse">連接到 Stripe 付款頁面...</p>}
                 {premiumStatus === 'success' && <p className="text-center text-green-400 text-sm font-bold">✅ 付款成功！功能已解鎖</p>}
+                {premiumError && <p className="text-center text-red-400 text-sm mt-2">{premiumError}</p>}
+                {!isProcessing && !premiumStatus && !premiumError && (
+                  <p className="text-center text-amber-400/40 text-xs mt-1">可使用信用卡 / 金融卡安全結帳</p>
+                )}
               </div>
             )}
 
