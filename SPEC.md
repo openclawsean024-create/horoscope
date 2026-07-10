@@ -1,115 +1,34 @@
-# 星座分析網站 — 重新設計 SPEC
+# 星座分析網站 — 規格計劃書 v1.0
 
-## 1. Concept & Vision
+## 1. 問題陳述
+Notion簡報要求一個專業的占星網站，其風格清晰、固執己見、易於理解，包括每周和每月的運勢、性格特徵、職業和愛情建議、守護星、元素分析、兼容星座和年度預測。 Vercel 現場標題是 Stella Chart |十二生肖檔案館。市場上有許多簡短的社交貼文和舊的靜態頁面，但很少有產品將及時更新與持久存檔結合。
 
-一個專業、精緻的星座命盤分析網站。告別童稚感，轉向「星象師的私人藏書室」美學——深沉、神秘、優雅。整體氛圍如同深夜在古老天文台中翻閱星圖：暗色背景襯托金色星辰光芒，每個細節都散發著專業占星師的氣質。
+用戶希望在行動裝置上獲得快速的每週指導以及可以重新訪問和共享的更深入的常青頁面。痛點是更新不一致、十二個標誌的品質參差不齊、SEO 結構薄弱、AI 文本過於通用以及付費價值不明確。該產品應該感覺像是一個可靠的十二生肖知識庫加上當前的星座運勢桌，而不是冒充任何特定的公共占星家。
 
-## 2. Design Language
+## 2. 解決方案
+將 Stella Chart 建置為十二生肖分析和存檔平台。每個星座都有一個常綠頁面，涵蓋性格、優勢、盲點、職業風格、愛情模式、金錢態度、健康提醒、守護星、元素和兼容星座。動態內容按週、月和年組織，因此使用者可以閱讀當前預測並瀏覽過去的時期。
 
-### Aesthetic Direction
-**Celestial Elegance** — 深邃宇宙 + 古典占星圖鑑感。類似古老星圖與現代深色 UI 的融合。
+內容風格應該給出一個清晰的標題，解釋原因，並以實用的建議結尾。例如，文案不應說愛是好的，而應說本週你可能希望被理解，因此在期待別人猜測之前先說明你的需求。人工智慧可以起草內容，但模板和編輯規則必須防止所有標誌聽起來都一樣。該產品是娛樂和反思，而不是醫療、投資或生活決策建議。
 
-### Color Palette
-- **Background**: `#080b14` (深空黑)
-- **Surface**: `#0f1523` (星夜藍黑)
-- **Card**: `#141c2e` (夜空卡)
-- **Border**: `rgba(212, 175, 55, 0.12)` (星光金，極淡)
-- **Primary/Gold**: `#d4af37` (古金)
-- **Accent**: `#c9a84c` (啞金)
-- **Muted Gold**: `rgba(212, 175, 55, 0.5)` (淡金)
-- **Text Primary**: `#f5f0e8` (羊皮紙白)
-- **Text Secondary**: `#8a8070` (古銀灰)
-- **Fire**: `#e07040` (暖橙紅)
-- **Earth**: `#8b6f47` (土棕)
-- **Air**: `#6a9fb5` (天藍灰)
-- **Water**: `#4a7a9b` (深海藍)
+## 3. 功能清單
+MVP 功能包括十二星座索引、單一星座頁面、每週星座運勢、每月星座運勢、年度預測和相容性工具。相容性工具選擇兩個標誌並返回吸引力、溝通、衝突、長期建議以及帶有解釋的分數。每個符號和句點都應該有一個可索引的 URL、元資料和共享卡。
 
-### Typography
-- **Headings**: `Cormorant Garamond` (Google Fonts) — 優雅的襯線字體，有古典占星書的氣質
-- **Body**: `Noto Sans TC` — 清晰的中文閱讀
-- **Accent/Labels**: `Cinzel` — 羅馬碑文風格，用於星座名、標題裝飾
+高級功能包括出生圖輸入、上升星座和月亮星座個性化、每日推送或電子郵件提醒、時事通訊註冊、收藏夾、內容 CMS、Stripe 會員、人工智能問答、塔羅牌和占星術主題文章以及生成的 OG 圖像。管理員必須建立新的每週一期、編輯簽名副本、標記免費或付費段落，以及查看 SEO 流量和訂閱轉換。
 
-### Spatial System
-- 8px base unit
-- Section padding: 80px vertical
-- Card padding: 32px
-- Gap between cards: 24px
+## 4. 技術棧
+使用 Next.js App Router、React、TypeScript、Tailwind CSS 和 Vercel。內容可以從 MDX 或 JSON 開始，並在更新工作流程成長時移至 Supabase Postgres 或無頭 CMS。路線包括 /zodiac/[sign]、/weekly/[year-week]/[sign]、/monthly/[year-month]/[sign]、/yearly/[year]/[sign] 和 /compatibility。靜態頁面使用 ISR 或建置時產生；會員內容使用伺服器元件或 API 路由。
 
-### Motion Philosophy
-- Entrance: opacity 0→1, translateY 20px→0, 600ms ease-out, staggered 80ms
-- Hover: scale(1.02), shadow lift, 250ms ease
-- Card reveal: subtle golden glow pulse on hover
-- No bounce, no playful animations — smooth, deliberate, mysterious
+Stripe 管理訂閱，Auth.js 或 Supabase Auth 管理帳戶，Vercel Analytics 或 PostHog 追蹤簽名視圖、閱讀深度、相容性提交、新聞通訊註冊和訂閱點擊。 SEO 使用元資料 API、網站地圖、規範 URL、schema.org 文章和麵包屑，以及 OG 圖片生成。測試驗證內容架構、路線產生、付費專區行為、網站地圖和行動佈局。
 
-### Visual Assets
-- Star particles: CSS radial gradients
-- Constellation lines: SVG decorations
-- Card backgrounds: subtle radial gradient overlays
-- Icons: Unicode zodiac symbols (♈♉♊ etc.) + custom SVG
+## 5. 完成標準 DoD
+當所有 12 個常青標誌頁面都已上線且具有一致的結構和至少有意義的長格式內容、完成一期每週一期和一期每月一期、存在年度預測頁面並且兼容性工具涵蓋 144 對或使用可解釋的矩陣時，MVP 就完成了。主頁、簽名、每週、每月和相容性頁面必須在手機和桌面上運行。
 
-## 3. Layout & Structure
+SEO 準備需要獨特的標題、描述、規範、OG 圖像、網站地圖和乾淨的內部連結。業務準備就緒需要 Stripe 測試訂閱、登入、付費內容解鎖、取消流程、Free Plus Pro 計劃頁面、時事通訊捕獲以及添加下週內容的管理員友好方式。 Lighthouse SEO 應該在 95 以上，效能在 85 以上。至少有 30 位讀者應該測試它，平均頁面停留時間在 90 秒以上。
 
-### Page Structure
-1. **Hero Section**: Full viewport, starfield background, site title with constellation decor
-2. **Zodiac Grid**: 12 signs in elegant card grid (4×3 on desktop, 2-col mobile)
-3. **Individual Sign Page**: Full chart with personality, lucky info, care points, compatibility
-4. **Tarot Section**: Card selection interface
+## 6. 風險與決策
+風險之一是持續的內容製作。決策：使用結構化範本和人工智慧草稿工具，但對關鍵句子和行動建議進行人工審查。風險之二是與特定公共占星師的品牌混淆。決定：絕不使用某人的名字、照片或口號作為代言；只保留專業、清晰、有主見的寫作的抽象原則。
 
-### Navigation
-- Minimal top nav with site name (left) and section links (right)
-- On scroll: nav gets subtle backdrop blur
+風險三是SEO競爭。決策：專注於存檔頁面、相容性長尾、年度預測和工具，而不僅僅是通用的每日星座運勢。風險四是人工智慧內容同質化。決定：每篇文章必須包括時代主題、行動建議、要避免的事情以及基於星座元素或行星因素的具體提醒。風險五是付費轉換率低。決定：免費內容提供快速價值，付費方案解鎖個人化、深度每週閱讀、年度報告和無廣告體驗。
 
-### Responsive Strategy
-- Desktop: 4-column zodiac grid, side-by-side layouts
-- Tablet: 3-column grid
-- Mobile: 2-column grid, stacked content
-
-## 4. Features & Interactions
-
-### Core Features
-1. **星座選擇首頁**: 12 星座卡片網格，點擊進入個人分析
-2. **星座詳細頁**: 完整分析（性格描述、特質標籤、幸運資訊、保養重點、相容星座）
-3. **塔羅占卜**: 牌卡選擇與解讀
-4. **星座相容度**: 兩星座相容度計算
-
-### Interaction Details
-- Zodiac card hover: golden glow border + slight scale up
-- Selected state: solid gold border
-- Tarot card flip animation on selection
-- Smooth scroll between sections
-
-### Empty/Loading/Error States
-- Loading: pulsing star animation
-- Error: constellation "404" illustration
-
-## 5. Component Inventory
-
-### ZodiacCard
-- Shows: emoji, name, element badge
-- States: default (dark card with gold border hint), hover (golden glow), active (gold solid border)
-- Golden glow on hover
-
-### ElementBadge
-- Small pill with element name + color dot
-- Fire: orange, Earth: brown, Air: blue, Water: deep blue
-
-### SignDetailPage
-- Hero with sign emoji (large), name, element
-- Personality traits as elegant tags
-- Lucky info in 4-quadrant grid (color, number, direction, compatible signs)
-- Care points section
-- Compatibility calculator
-
-### TarotCard
-- Card face with name
-- States: face-down (decorative back), face-up (revealed), selected (gold highlight)
-
-## 6. Technical Approach
-
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: CSS Modules (no Tailwind) + CSS custom properties
-- **Fonts**: Google Fonts (Cormorant Garamond, Noto Sans TC, Cinzel)
-- **Data**: Static JSON/TypeScript data files
-- **Deployment**: Vercel
-- **No external UI libraries** — custom components for full design control
+## 7. 變現路徑
+免費：十二個符號資料庫、每周和每月摘要以及基本相容性。另加每月 149 元新台幣：每週深度閱讀、收藏夾、電子郵件提醒和無廣告網站。專業版每月 399 元：個人化圖表、年度報告和進階相容性。創作者或合作夥伴每月 1,200 新台幣：嵌入式星座小工具、聯名品牌內容和 API 授權。
