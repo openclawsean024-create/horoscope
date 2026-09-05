@@ -1,9 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  turbopack: {
-    root: "/home/sean/.openclaw/workspace/workspaces/alan/horoscope",
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
