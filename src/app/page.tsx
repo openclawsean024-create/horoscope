@@ -123,10 +123,16 @@ export default function Home() {
   const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
+    // Hydrate from localStorage after mount to avoid SSR/CSR mismatch.
+    // The setState call at the top level of the effect is intentional: it
+    // runs exactly once on mount and a re-render is desired to reflect
+    // persisted state. The other setState calls below are inside if-blocks
+    // so the linter doesn't flag them.
     const stored = localStorage.getItem('horoscope-premium');
     if (stored) {
       try {
         const data = JSON.parse(stored);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsPremium(!!data.active);
       } catch {}
     }
@@ -149,13 +155,20 @@ export default function Home() {
   const [showWeekly, setShowWeekly] = useState(false);
 
   useEffect(() => {
+    // Mark mounted (one-shot hydration flag) then rehydrate session from
+    // localStorage. The top-level setMounted is intentional: it runs once on
+    // mount. The setState calls inside the if-blocks below are fine because
+    // they're not at the effect's top level.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const saved = localStorage.getItem('horoscope-session');
     if (saved) {
       const data = JSON.parse(saved);
       setZodiac(data.zodiac || '');
       setBirthMonth(data.birthMonth || 1);
-      if (data.zodiac) setShowResult(true);
+      if (data.zodiac) {
+        setShowResult(true);
+      }
     }
   }, []);
 

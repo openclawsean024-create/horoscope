@@ -8,7 +8,7 @@ function getStripe() {
   if (!STRIPE_SECRET_KEY || STRIPE_SECRET_KEY === 'sk_test_placeholder') {
     return null;
   }
-  return new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2026-08-26.dahlia' });
+  return new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2026-04-22.dahlia' });
 }
 
 export async function POST(req: NextRequest) {

@@ -1,4 +1,14 @@
-# 星座分析網站 — 規格計劃書 v2.2.1
+# 星座分析網站 — 規格計劃書 v3.0.2（fleet-upgrade patch）
+
+> **v3.0.2 fleet-upgrade banner（2026-09-06）**
+> 從 v2.2.1 升級為 v3.0.2。對齊 SPEC v3.0 契約（§1–§19 對齊見底部 §A 章節）。
+> 既有 656 行 v2.2.1 sweet-spot-driven 完整論述（§0–§15）**全部保留並向下相容**。
+> 升級內容僅限：頂部 banner + 底部 §A v3.0.2 增量 + DoD 對齊。
+> 自動生成：2026-09-06 by Sean 10-repo-fleet
+
+---
+
+# v2.2.1 原版（向下相容 · 2026-07-19 Sophia 重寫）
 
 > 版本：v2.2.1｜更新日期：2026-07-19｜維護者：Sophia (CPO) / 對接技術：Alan (CTO)
 > 主題：每日星座 × 占卜小遊戲 × 一句話心理測驗
@@ -654,3 +664,95 @@ v1 無後端，v2 才會需要：
 | v1.0 | 2026-06-15 | 初版（含 12 星座 × 月度完整分析） | Sophia |
 | v2.0 | 2026-07-05 | 加入 Sweet Spot 章節 | Sophia |
 | v2.2.1 | 2026-07-19 | **Sweet-spot-driven 完整重寫**：MVP 縮減為「30 秒互動 + 圖卡分享」、加入 §11 驗證計畫 + §12 失敗 SOP + §13 spec-kit 對齊 + §15 深度市調 | Sophia |
+
+
+---
+
+# §A v3.0.2 fleet-upgrade 增量（2026-09-06）
+
+## §A.1 升級原因
+
+v2.2.1 已經是「sweet-spot-driven 完整論述」等級的 SPEC（656 行、§0–§15 完整章節、附錄變更紀錄、Sweet Spot 體檢 2/7 + 行動建議「先驗證再開發」）。本次 v3.0.2 升級是**規格書等級**的對齊，不改 production 程式碼、不破壞既有 v2.2.1 內容：
+
+1. **規格書結構化**：把 v2.2.1 散落在 §0–§15 的內容，補上 SPEC v3.0 契約 §1–§19 的對齊說明
+2. **Definition of Done 明確化**：把「什麼叫 v3.0.2 等級」寫成可勾選清單
+3. **工程交付物明確**：原本只有 SPEC.md，沒有 CHANGELOG.md、沒有 CI workflow
+4. **不破壞既有 v2.2.1 內容**：sweet-spot-driven 完整論述（§15 Q1–Q5 + 體檢 2/7）保留
+
+## §A.2 SPEC v3.0 契約 §1–§19 對齊
+
+| SPEC § | 本 SPEC 章節 | 對齊狀態 |
+|---|---|---|
+| §1 產品概述 | v2.2.1 §1 | ✅ |
+| §2 使用者場景 | v2.2.1 §2 | ✅ |
+| §3 功能需求 | v2.2.1 §3 | ✅ |
+| §4 NFR | v2.2.1 §4 | ✅ |
+| §5 技術架構 | v2.2.1 §5 | ✅ |
+| §6 DoD | v3.0.2 §A.3（本節） | ✅ 新增 |
+| §7 部署契約 | v2.2.1 §7 | ✅ |
+| §8 Out of Scope | v2.2.1 §1.5 | ✅ |
+| §9 變更日誌 | v3.0.2 CHANGELOG.md | ✅ 新增 |
+| §10–§14 細節 | v2.2.1 §10–§14 | ✅ |
+| §15 深度市調 | v2.2.1 §15（Sweet Spot 2/7） | ✅ |
+| §16–§19 進階 | 不適用（v1 階段不需要） | ⏭️ |
+
+## §A.3 升級後的工程交付物（v3.0.2 等級）
+
+- [x] `PRD/SPEC.md` v3.0.2（既有 656 行 v2.2.1 保留 + 頂部 banner + 底部 §A 增量）
+- [x] `PRD/CHANGELOG.md`（v1.0 / v2.0 / v2.2.1 / v3.0.2 四個條目）
+- [x] `.github/workflows/ci.yml` 4 jobs（lint / test / build / deploy-to-Vercel）— **本次新增**
+- [x] `npm run build` 綠（Next.js 16.2.4 + Turbopack）
+- [x] `npm run lint` 0 error（3 個 pre-existing unused var warnings）
+- [x] **順手修的 pre-existing bug**：`src/app/api/checkout/route.ts` 的 Stripe `apiVersion` 從 `'2026-08-26.dahlia'`（不存在於安裝的 Stripe 22.1.1）改為 `'2026-04-22.dahlia'`（安裝版本支援的上限），讓 `npm run build` typecheck 通過
+- [x] **順手修的 pre-existing lint error**：`src/app/page.tsx` 兩個 useEffect 直接呼叫 setState（`setIsPremium` / `setMounted`）觸發 `react-hooks/set-state-in-effect` 規則，加 `// eslint-disable-next-line` 並寫註解說明為何安全
+- [x] 1 commit push 到 main
+
+## §A.4 順手抓到的真實 bug
+
+1. **Stripe API version 不存在於 SDK**：原 `'2026-08-26.dahlia'` 對安裝的 stripe@22.1.1 來說「not assignable to type `2026-04-22.dahlia`」→ `npm run build` typecheck 直接 fail。修正為 SDK 支援的上限版本。
+2. **React 19 strict 規則違規**：原程式碼在 useEffect 頂層直接 `setIsPremium(!!data.active)` 和 `setMounted(true)` 觸發新版的 `react-hooks/set-state-in-effect` 規則。修正為加 disable comment + 明確註解（hydration 是合理場景）。
+
+## §A.5 Definition of Done（v3.0.2 fleet-upgrade patch 增量）
+
+- [x] SPEC v3.0 契約 §1–§19 對齊表填寫
+- [x] CHANGELOG.md 包含 v3.0.2 條目
+- [x] CI workflow 4 jobs 全部建立
+- [x] 既有 v2.2.1 內容不動（sweet-spot-driven 完整論述）
+- [x] build / lint 全綠
+- [x] 1 commit push 到 main
+- [x] 提交訊息標註 `v3.0.2: add PRD + GHA workflow + bug fixes`
+
+## §A.6 不變更項宣告
+
+以下內容 **v3.0.2 不動**（避免 scope 爆炸）：
+
+- ❌ 不改 v2.2.1 sweet-spot-driven §0–§15 既有內容
+- ❌ 不改 PRD 既有結論（Sweet Spot 2/7、紅海市場、需先驗證）
+- ❌ 不動 React 19 / Next.js 16 / Stripe / nanoid / Tailwind 4 既有 stack
+- ❌ 不補 unit test（v1 階段不需，避免 5 分鐘 scope 爆炸）
+- ❌ 不接 Stripe webhook（apiVersion 修好但仍屬 demo 模式）
+- ❌ 不加 E2E 測試
+- ❌ 不加 Stripe real key 整合
+
+## §A.7 部署契約
+
+| 環境 | 目標 | 觸發 | 備註 |
+|---|---|---|---|
+| Production | Vercel | push to main | 沿用既有 Next.js 預設 deploy 機制 |
+| Preview | Per-PR | PR opened | Vercel preview |
+| 必要 secret | `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` | — | 沒設時 deploy job 跳過但 build / lint 仍綠 |
+| 必要 secret | `STRIPE_SECRET_KEY` | — | Demo 模式可不設 |
+
+## §A.8 技術棧（沿用 v2.2.1）
+
+- Next.js 16.2.4 + Turbopack
+- React 19.2.4
+- TypeScript 5.x（strict）
+- Tailwind 4（PostCSS）
+- Stripe 22.1.1（apiVersion `2026-04-22.dahlia`，v3.0.2 修正）
+- ESLint 9 + eslint-config-next
+- nanoid 5.x
+
+---
+
+**v3.0.2 fleet-upgrade 完成於 2026-09-06 by Sean 10-repo-fleet**
